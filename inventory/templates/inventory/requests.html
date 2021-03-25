@@ -1,0 +1,22 @@
+{% extends "inventory/layout.html" %}
+
+{% block body %}
+<div class="container">
+   
+    <div class="row justify-content-md-center">
+        <div class="col-lg-7 text-center m-5">
+            <h3>Household Requests</h3>
+            <hr />
+            <ul class="list-group list-group-flush">
+            {% for request in numRequests %}
+                <li class="list-group-item">{{request.from_user|title}}  
+                    <a href="{% url 'accept_household_request' request.pk %}" class="ml-5 btn btn-outline-success">Accept</a>
+                    <a href="{% url 'reject_household_request' request.pk %}" class="ml-5 btn btn-outline-danger">Reject</a>
+                </li>
+            {% endfor %}
+            </ul>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

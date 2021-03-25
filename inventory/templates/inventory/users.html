@@ -1,0 +1,49 @@
+{% extends "inventory/layout.html" %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-lg-7 text-center m-5">
+            <form method="POST" action="{% url 'search_users' %}">
+                {% csrf_token %}
+                {{form}}
+            </form>
+           
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-lg-7 text-center m-5">
+            <h3>Search Results:</h3>
+            <ul class="list-group list-group-flush">
+               
+            {% for u in users%}
+                <li class="list-group-item user{{u.pk}}">{{u|title}}  
+                   
+                    {% if user != u %}
+                        {% if u in household %}
+                        
+                        <a class="ml-5">(Part Of Household)</a>
+                    
+                        {% else %}
+                            
+                            {% if u in pendingRequests %}
+                            <button disabled class="ml-5 btn btn-outline-secondary">Request Sent</button>
+                            {% else %}
+                            <button onclick="sendHouseholdRequest(`{{u.pk}}`)" class="ml-5 btn btn-outline-primary">Add to Household</button>
+                            {% endif %}
+                            
+                           
+                        {% endif %}
+                        
+                    {% else %}
+                        (me)
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "inventory/layout.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-md-center mb-5">
+        <div class="col-4 text-center">
+            <a href="{% url 'create_item' %}" class="btn btn-outline-primary">Store Item</a>
+        </div>
+        <div class="col-4 text-center">
+            <a href="{% url 'create_storage' %}" class="btn btn-outline-primary">Create Storage</a>
+        </div>
+        <div class="col-4 text-center">
+            <a href="{% url 'create_location' %}" class="btn btn-outline-primary">Create Location</a>
+        </div>
+     
+    </div>
+    <div class="row justify-content-md-center mb-2">
+        <div class="col-4 text-center">
+            <h4>My Household Inventory</h4>
+            <hr>
+        </div>
+        
+        <!-- <hr /> -->
+    </div>
+
+    
+    <div class="row text-right">
+        <div class="dropdown show">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Filter
+                          </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#">Category</a>
+                <ul class="dropdown-menu">
+                    {% for category in categories %}
+                    <li><a onclick="filterByCat(`{{category.pk}}`)" class="categoryFilter dropdown-item" href="#">{{category.category_name}}</a></li>
+                    {% endfor %}
+                </ul>
+            
+            </li>
+            
+            <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#">Storage Type</a>
+                <ul class="dropdown-menu">
+                    {% for s in storage %}
+                    <li><a onclick="filterByStorage(`{{s.pk}}`)" class="dropdown-item" href="#">{{s}}</a></li>
+                    {% endfor %}
+                </ul>
+            
+            </li>
+            <li class="dropdown-submenu"><a class="dropdown-item dropdown-toggle" href="#">Location</a>
+                <ul class="dropdown-menu">
+                    {% for l in location %}
+                    <li><a onclick="filterByLocation(`{{l.pk}}`)" class="dropdown-item" href="#">{{l.location}}</a></li>
+                    {% endfor %}
+                </ul>
+            
+            </li>
+            <li class="dropdown"><a onclick="resetFilter()" class="dropdown-item">Reset</a></li>
+            </ul>
+          </div>
+          <div class="col results"><span class="alert alert-primary" role="alert"></span> </div>
+          <div class="col text-muted">Total Items: {{inventory|length}}</div>
+    </div>
+    <div class="row justify-content-md-center">
+        
+            {% for item in inventory %}
+            <div id="item{{item.pk}}" class="item col-lg-4 col-sm-12 col-md-6 border rounded mb-3 pb-1 {{item.stored_in.location.pk}}Location {{item.stored_in.pk}}Storage {{item.category.pk}}Cat">
+                <div class="card-body">
+                    <span class="Location" style="display: none;">{{item.stored_in.location.pk}}</span>
+                    <span class="Storage" style="display: none;">{{item.stored_in.pk}}</span>
+                    {% if item.img != "" %}
+                    <div class="text-center">
+                    <img style="width: 200px;" src="{{item.img}}">
+                </div>
+                    {% endif %}
+                    <h2 class="card-title">{{ item.item_name }}</h2>
+                    <p class="card-text">{{ item.description }}</p>
+                    <p class="card-text">Owner: {{item.owner | title}}</p>
+                    <p class="card-text"><small class="text-muted">{{item.category}}</small></p>
+                    <hr />
+                    <p class="card-text stored_in">Stored in {{item.stored_in}}</p>  
+                    <p class="text-muted card-text"><small>Storage Notes: {{item.stored_in.notes}} </small></p>
+                    {% if user == item.owner %}  
+                    <button onclick="editMode(`{{item.pk}}`)" class="btn btn-outline-secondary editButton{{item.pk}}">Update Item</button>
+                    <button onclick="deleteItem(`{{item.pk}}`)" class="btn btn-outline-warning">Delete</button>
+                    {% endif %}
+                </div>
+                <div class="editing editZone{{item.pk}}">
+                    <h5>Edit </h5>
+                    <form>
+                        <div class="form-group">
+                            <label class="form-label">New Location:</label>
+                            <select class="form-control">
+                                {% for s in storage %}
+                                <option
+                                
+                                value="{{s.pk}}">{{ s }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                <button onclick="cancel(`{{item.pk}}`)" class="btn btn-danger">Cancel</button> 
+                <input class="btn btn-success" type="submit" value="Save" /></form>
+                </div>
+            </div>
+            {% endfor %}
+        
+    </div>
+</div>
+{% endblock %}

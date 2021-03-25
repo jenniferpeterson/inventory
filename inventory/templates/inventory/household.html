@@ -1,0 +1,23 @@
+{% extends "inventory/layout.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-6">
+            <h5>My Household</h5>
+            {% if household.count == 0 %}
+            <p>No users in household</p>
+            {% endif %}
+   
+            <ul class="list-group">
+             {% for roomie in household %}
+             <li class="list-group-item">{{roomie.username|title}} <a href="{% url 'remove_from_household' roomie.pk %}" class="btn btn-outline-danger float-right">Remove</a></li>
+             {% endfor %}
+             
+             
+           </ul>
+        </div>
+    </div>
+   
+</div>
+{% endblock %}
