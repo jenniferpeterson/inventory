@@ -17,9 +17,7 @@ import django_heroku
 import environ
 
 
-import logging
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
+
 
 AUTH_USER_MODEL = "inventory.User"
 
@@ -41,7 +39,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'inventory-jpeterson.herokuapp.com']
 
 
 # Application definition
@@ -94,13 +92,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': env('DATABASE_NAME'),
+        'NAME': os.environ['DATABASE_NAME'],
 
-        'USER': env('DATABASE_USER'),
+        'USER': os.environ['DATABASE_USER'],
 
-        'PASSWORD': env('DATABASE_PASSWORD'),
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
 
-        'HOST': 'localhost',
+        'HOST':  'localhost',
 
         'PORT': '5432',
     }
