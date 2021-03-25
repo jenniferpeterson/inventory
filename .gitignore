@@ -1,5 +1,2 @@
 /myenv
-/final_project/__pycache__
-/final_project/settings.py
-/inventory/migrations
-/inventory/__pycache__
+/final_project/.env
